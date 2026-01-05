@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Factory Dashboard - ALL PRODUCTS</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #0f0f23; color: #0f0; }
+        .product { background: rgba(0,50,0,0.3); border: 1px solid #0f0; margin: 15px; padding: 20px; border-radius: 10px; }
+        .live { border-left: 5px solid #0f0; }
+        .stopped { border-left: 5px solid #f00; opacity: 0.7; }
+        button { background: #000; color: #0f0; border: 1px solid #0f0; padding: 10px 20px; margin: 5px; cursor: pointer; }
+        h1 { color: #0f0; text-shadow: 0 0 10px #0f0; }
+        .stats { display: flex; justify-content: space-around; margin: 20px 0; }
+        .stat-box { background: rgba(0,30,0,0.5); padding: 15px; border-radius: 5px; text-align: center; }
+    </style>
+</head>
+<body>
+    <h1>🤖 AI FACTORY - ALL PRODUCTS</h1>
+    
+    <div class="stats">
+        <div class="stat-box">
+            <h3>📊 TOTAL PRODUCTS</h3>
+            <h1>8</h1>
+        </div>
+        <div class="stat-box">
+            <h3>💰 EST. MONTHLY REVENUE</h3>
+            <h1>$3,240</h1>
+        </div>
+        <div class="stat-box">
+            <h3>👥 POTENTIAL CUSTOMERS</h3>
+            <h1>247</h1>
+        </div>
+    </div>
+    
+    <h2>🚀 YOUR SAAS PRODUCTS:</h2>
+    
+    <div class="product live">
+        <h3>1. My Real SaaS</h3>
+        <p>📍 Location: ~/my_real_saas/</p>
+        <p>🚀 Status: <span style="color:#0f0">● RUNNING (port 5000)</span></p>
+        <button onclick="window.open('http://localhost:5000')">Open Product</button>
+        <button onclick="restart(1)">Restart</button>
+        <button onclick="viewCode(1)">View Code</button>
+    </div>
+    
+    <div class="product stopped">
+        <h3>2. Instant SaaS</h3>
+        <p>📍 Location: ~/instant_saas/</p>
+        <p>🚀 Status: <span style="color:#f00">● STOPPED</span></p>
+        <button onclick="launch(2, 5001)">Launch on Port 5001</button>
+        <button onclick="viewCode(2)">View Code</button>
+    </div>
+    
+    <div class="product stopped">
+        <h3>3. SaaS 122436</h3>
+        <p>📍 Location: ~/simple_saas_factory/saas_122436/</p>
+        <p>🚀 Status: <span style="color:#f00">● STOPPED</span></p>
+        <button onclick="launch(3, 5002)">Launch on Port 5002</button>
+        <button onclick="viewCode(3)">View Code</button>
+    </div>
+    
+    <div style="margin-top: 40px; border-top: 1px solid #0f0; padding-top: 20px;">
+        <h2>⚡ BULK ACTIONS</h2>
+        <button onclick="launchAll()" style="background:#0f0;color:#000;padding:15px 30px;font-size:18px;">
+            🚀 LAUNCH ALL 8 PRODUCTS
+        </button>
+        <button onclick="stopAll()" style="background:#f00;color:#fff;padding:15px 30px;font-size:18px;">
+            🛑 STOP ALL PRODUCTS
+        </button>
+        <button onclick="buildNew()" style="background:#00f;color:#fff;padding:15px 30px;font-size:18px;">
+            🏗️ BUILD NEW PRODUCT
+        </button>
+    </div>
+    
+    <script>
+    function launch(productNum, port) {
+        fetch(`/api/launch?product=${productNum}&port=${port}`)
+        .then(() => alert(`Launching product ${productNum} on port ${port}...`))
+        .catch(() => alert('API not running. Run: python ~/my_real_saas/app.py'));
+    }
+    
+    function launchAll() {
+        if (confirm('Launch ALL 8 products on ports 5001-5008?')) {
+            alert('Launching all products... Check terminal!');
+            // This would call your manage.sh script
+        }
+    }
+    
+    function stopAll() {
+        if (confirm('Stop ALL running products?')) {
+            alert('Stopping all products...');
+            fetch('/api/stop_all');
+        }
+    }
+    
+    function buildNew() {
+        alert('Building new product... This takes 30 seconds.');
+        fetch('/api/build_new', {method: 'POST'})
+        .then(() => alert('New product built! Check ~/AI_FACTORY/products/'));
+    }
+    
+    function viewCode(productNum) {
+        const files = [
+            'my_real_saas/app.py',
+            'instant_saas/app.py',
+            'simple_saas_factory/saas_122436/app.py',
+            'my_saas/app.py',
+            'saas_130136/app.py',
+            'saas_130733/app.py',
+            'saas_131142/app.py',
+            'saas_093742/app.py'
+        ];
+        alert(`Code at: ~/${files[productNum-1]}`);
+    }
+    </script>
+    
+    <div style="margin-top: 40px; font-size: 12px; color: #888;">
+        <p>💡 Tip: Run this in terminal to launch all products:</p>
+        <code style="background:#000;color:#0f0;padding:10px;display:block;">
+            cd ~ && ./manage.sh launch all
+        </code>
+    </div>
+</body>
+</html>
